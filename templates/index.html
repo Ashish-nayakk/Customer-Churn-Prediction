@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Customer Churn Prediction</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    /* Animated gradient background */
+    @keyframes gradient-x {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .animate-gradient {
+      background-size: 200% 200%;
+      animation: gradient-x 12s ease infinite;
+    }
+
+    /* Card Neon Pulse */
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 25px 5px rgba(0, 240, 255, 0.6); }
+      50% { box-shadow: 0 0 35px 12px rgba(0, 240, 255, 0.9); }
+    }
+    .glow-pulse {
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+
+    /* Button Neon Pulse */
+    @keyframes neon-pulse {
+      0%, 100% { box-shadow: 0 0 15px 3px rgba(0,240,255,0.8); }
+      50% { box-shadow: 0 0 25px 6px rgba(0,240,255,1); }
+    }
+    .neon-pulse {
+      animation: neon-pulse 2s infinite;
+    }
+
+    /* Fade-in + slide-up for results */
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up {
+      animation: fadeUp 0.8s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center 
+             bg-gradient-to-r from-black via-[#00F0FF] to-black animate-gradient">
+
+  <!-- Neon Glassmorphic Card -->
+  <div class="w-full max-w-3xl 
+              bg-black/40 backdrop-blur-lg 
+              border border-cyan-400/50 
+              rounded-2xl p-8 text-white glow-pulse">
+
+    <h2 class="text-3xl font-bold text-center mb-6">📊 Customer Churn Prediction</h2>
+
+    <!-- Form -->
+    <form method="post" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      
+      <!-- Age -->
+      <div>
+        <label class="block text-sm font-medium text-gray-200">Age</label>
+        <input type="number" name="age" value="30" min="10" max="100"
+               class="w-full mt-1 p-2 rounded-lg bg-gray-900 border border-gray-700 text-white 
+                      focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 
+                      shadow-[0_0_10px_2px_rgba(0,240,255,0.3)] focus:shadow-[0_0_15px_4px_rgba(0,240,255,0.7)]">
+      </div>
+
+      <!-- Gender -->
+      <div>
+        <label class="block text-sm font-medium text-gray-200">Gender</label>
+        <select name="gender"
+                class="w-full mt-1 p-2 rounded-lg bg-gray-900 border border-gray-700 text-white 
+                       focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 
+                       shadow-[0_0_10px_2px_rgba(0,240,255,0.3)] focus:shadow-[0_0_15px_4px_rgba(0,240,255,0.7)]">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div>
+
+      <!-- Tenure -->
+      <div>
+        <label class="block text-sm font-medium text-gray-200">Tenure (months)</label>
+        <input type="number" name="tenure" value="12" min="0" max="72"
+               class="w-full mt-1 p-2 rounded-lg bg-gray-900 border border-gray-700 text-white 
+                      focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 
+                      shadow-[0_0_10px_2px_rgba(0,240,255,0.3)] focus:shadow-[0_0_15px_4px_rgba(0,240,255,0.7)]">
+      </div>
+
+      <!-- Monthly Charges -->
+      <div>
+        <label class="block text-sm font-medium text-gray-200">Monthly Charges</label>
+        <input type="number" name="monthly_charges" value="70" step="0.01"
+               class="w-full mt-1 p-2 rounded-lg bg-gray-900 border border-gray-700 text-white 
+                      focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 
+                      shadow-[0_0_10px_2px_rgba(0,240,255,0.3)] focus:shadow-[0_0_15px_4px_rgba(0,240,255,0.7)]">
+      </div>
+
+      <!-- Total Charges -->
+      <div>
+        <label class="block text-sm font-medium text-gray-200">Total Charges</label>
+        <input type="number" name="total_charges" value="1000" step="0.01"
+               class="w-full mt-1 p-2 rounded-lg bg-gray-900 border border-gray-700 text-white 
+                      focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 
+                      shadow-[0_0_10px_2px_rgba(0,240,255,0.3)] focus:shadow-[0_0_15px_4px_rgba(0,240,255,0.7)]">
+      </div>
+
+      <!-- Contract -->
+      <div>
+        <label class="block text-sm font-medium text-gray-200">Contract Type</label>
+        <select name="contract"
+                class="w-full mt-1 p-2 rounded-lg bg-gray-900 border border-gray-700 text-white 
+                       focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 
+                       shadow-[0_0_10px_2px_rgba(0,240,255,0.3)] focus:shadow-[0_0_15px_4px_rgba(0,240,255,0.7)]">
+          <option value="Month-to-month">Month-to-month</option>
+          <option value="One year">One year</option>
+          <option value="Two year">Two year</option>
+        </select>
+      </div>
+
+      <!-- Internet Service -->
+      <div>
+        <label class="block text-sm font-medium text-gray-200">Internet Service</label>
+        <select name="internet"
+                class="w-full mt-1 p-2 rounded-lg bg-gray-900 border border-gray-700 text-white 
+                       focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 
+                       shadow-[0_0_10px_2px_rgba(0,240,255,0.3)] focus:shadow-[0_0_15px_4px_rgba(0,240,255,0.7)]">
+          <option value="No">No</option>
+          <option value="DSL">DSL</option>
+          <option value="Fiber Optic">Fiber Optic</option>
+        </select>
+      </div>
+
+      <!-- Tech Support -->
+      <div>
+        <label class="block text-sm font-medium text-gray-200">Tech Support</label>
+        <select name="techsupport"
+                class="w-full mt-1 p-2 rounded-lg bg-gray-900 border border-gray-700 text-white 
+                       focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 
+                       shadow-[0_0_10px_2px_rgba(0,240,255,0.3)] focus:shadow-[0_0_15px_4px_rgba(0,240,255,0.7)]">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="col-span-1 md:col-span-2 text-center mt-4">
+        <button type="submit" 
+                class="relative px-6 py-2 rounded-lg font-semibold
+                       text-black bg-cyan-400 neon-pulse 
+                       transition transform hover:scale-105">
+          🚀 Predict
+        </button>
+      </div>
+    </form>
+
+    <!-- Results -->
+    {% if result %}
+    <div class="mt-8 text-center fade-up">
+      <h3 class="text-xl font-semibold">Prediction: 
+        <span class="{% if prob > 70 %}text-red-400{% elif prob > 50 %}text-yellow-400{% else %}text-cyan-400{% endif %}">
+          {{ result }}
+        </span>
+      </h3>
+      <h4 class="text-lg mt-2">Churn Probability: 
+        <b class="text-cyan-300">{{ prob }}%</b>
+      </h4>
+
+      <!-- Gauge -->
+      <div id="gauge" class="mt-6"></div>
+      <script>
+        var fig = {{ gauge_json | safe }};
+        Plotly.newPlot('gauge', fig.data, fig.layout, {
+          responsive: true, 
+          displayModeBar: false
+        });
+      </script>
+
+      <!-- Legend -->
+      <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm">
+        <span class="px-3 py-1 rounded-full bg-green-700 text-white">🟢 Low risk (0–50%)</span>
+        <span class="px-3 py-1 rounded-full bg-yellow-500 text-black">🟡 Medium risk (50–70%)</span>
+        <span class="px-3 py-1 rounded-full bg-red-600 text-white">🔴 High risk (70–100%)</span>
+      </div>
+      <p class="text-center mt-2 text-gray-300">The needle points exactly at the predicted churn probability.</p>
+    </div>
+    {% endif %}
+
+  </div>
+</body>
+</html>
